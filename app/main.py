@@ -148,8 +148,15 @@ def index_document(document_id: int, db: Session = Depends(get_db)):
 
     return {"message": "Document indexed successfully"}
 @app.post("/search")
-def semantic_search(query: str, db: Session = Depends(get_db)):
-    doc_ids = search_documents(query)
+def semantic_search(
+    query: str,
+    top_k: int = 5,
+    db: Session = Depends(get_db)
+):
+    doc_ids = search_documents(query, top_k)
 
-    documents = db.query(Document).filter(Document.id.in_(doc_ids)).all()
+    documents = db.query(Document).filter(
+        Document.id.in_(doc_ids)
+    ).all()
+
     return documents
