@@ -5,6 +5,7 @@ import pytesseract
 from pdf2image import convert_from_path
 import tempfile
 import os
+from app.vector_store import add_document, search_documents
 
 from app.database import get_db
 from app.models.user import User
@@ -134,3 +135,28 @@ def upload_document(
         "document_id": document.id,
         "extracted_text": extracted_text
     }
+@app.post("/documents/index")
+def index_document(document_id: int, db: Session = Depends(get_db)):
+    document = db.query(Document).filter(Document.id == document_id).first()
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    if not document.content:
+        raise HTTPException(status_code=400, detail="Document has no content")
+
+    add_document(document.id, document.content)
+
+    return {"message": "Document indexed successfully"}
+@app.post("/search")
+def semantic_search(
+    query: str,
+    top_k: int = 5,
+    db: Session = Depends(get_db)
+):
+    doc_ids = search_documents(query, top_k)
+
+    documents = db.query(Document).filter(
+        Document.id.in_(doc_ids)
+    ).all()
+
+    return documents
