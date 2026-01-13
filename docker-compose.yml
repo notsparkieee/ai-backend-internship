@@ -1,0 +1,22 @@
+services:
+  # FastAPI Application
+  app:
+    build: .
+    container_name: ai-backend-app
+    ports:
+      - "8000:8000"
+    environment:
+      DB_USER: root
+      DB_PASSWORD: gameswerelifedude
+      DB_HOST: host.docker.internal
+      DB_PORT: 3306
+      DB_NAME: ai_backend
+    volumes:
+      - ./vector_index.faiss:/app/vector_index.faiss
+      - ./chunk_metadata.pkl:/app/chunk_metadata.pkl
+      - uploaded_documents:/app/uploaded_documents
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  uploaded_documents:
