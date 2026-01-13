@@ -1,6 +1,7 @@
 # Core Framework
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
+email-validator==2.1.0.post1
 
 # Database
 sqlalchemy==2.0.25
@@ -18,7 +19,7 @@ pdf2image==1.17.0
 # LangChain & AI
 langchain==0.1.6
 langgraph==0.0.20
-openai==1.10.0
+openai>=2.14.0
 
 # Utilities
 python-dotenv==1.0.1
