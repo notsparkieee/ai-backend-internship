@@ -1,14 +1,8 @@
 from langgraph.graph import StateGraph, END
 from app.agents.state import AgentState
-from app.agents.intent_classifier import classify_intent
+from app.agents.nodes import intent_node
 from app.agents.retrieval_node import retrieval_node
 from app.agents.answer_node import answer_node
-
-
-def intent_node(state):
-    state["intent"] = classify_intent(state["question"])
-    return state
-
 
 graph = StateGraph(AgentState)
 
@@ -23,7 +17,7 @@ graph.add_conditional_edges(
     lambda state: state["intent"],
     {
         "document_query": "retrieve",
-        "general_query": "answer",
+        "general_query": "answer"
     }
 )
 

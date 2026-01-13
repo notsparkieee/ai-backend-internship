@@ -1,8 +1,8 @@
-from typing import TypedDict, List
-
+from typing import TypedDict, List, Optional
 
 class AgentState(TypedDict):
     question: str
-    intent: str
-    documents: List[str]
-    answer: str
+    owner_id: int
+    intent: Optional[str]
+    retrieved_chunks: Optional[List[dict]]
+    answer: Optional[str]
